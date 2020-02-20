@@ -57,6 +57,14 @@
     public Inscripcions Inscripcion = new Inscripcions();
     public string Mensaje = "";
 
+
+    
+    protected override void OnInitialized()
+    {
+        Inscripcion = new Inscripcions();
+        Mensaje = string.Empty;
+    }
+
     public void Calculo()
     {
         Inscripcion.Disponible = Inscripcion.Limite - Inscripcion.Tomados;
@@ -65,7 +73,8 @@
 
     public void Limpiar()
     {
-        Inscripcions inscripcion = new Inscripcions();
+        Inscripcion = new Inscripcions();
+        Mensaje = string.Empty;
     }
 
     public void Guardar()
