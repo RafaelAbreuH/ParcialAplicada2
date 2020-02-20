@@ -10,14 +10,17 @@ namespace ParcialAplicada2.Models
     {
         [Key]
         public int InscripcionId { get; set; }
+        [Required(ErrorMessage ="Debes introducir un Semestre")]
         public string Semestre { get; set; }
+        [Required(ErrorMessage ="Debes introducir un Limite de Credito")]
         public int Limite { get; set; }
+        [Required(ErrorMessage ="Debes introducir la cantidad de creditos tomados")]
         public int Tomados { get; set; }
         public int Disponible { get; set; }
 
         public Inscripcions()
         {
-            InscripcionID = 0;
+            InscripcionId = 0;
             Semestre = String.Empty;
             Limite = 0;
             Tomados = 0;

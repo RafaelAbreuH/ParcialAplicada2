@@ -1,0 +1,38 @@
+﻿@page "/registro/consulta"
+
+
+<h3>ConsultaInscripcion</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Inscripcion Id</th>
+            <th>Semestre</th>
+            <th>Limite</th>
+            <th>Tomados</th>
+            <th>Disponibles</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in lista)
+        {
+        <tr>
+            <th>@item.InscripcionId</th>
+            <th>@item.Semestre</th>
+            <th>@item.Limite</th>
+            <th>@item.Tomados</th>
+            <th>@item.Disponible</th>
+        </tr>
+        }
+    </tbody>
+
+</table>
+@code {
+    	public List<Inscripcions> lista;
+
+	protected override void OnInitialized()
+	{
+		InscripcionController controller = new InscripcionController();
+
+		lista = controller.GetList(e => true);
+	}
+}

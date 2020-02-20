@@ -1,0 +1,133 @@
+﻿@page "/registro"
+
+
+<h3>Registro Inscripcion</h3>
+
+
+<div class="container">
+    <EditForm Model="Inscripcion"  OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
+
+        <div class="form-group">
+            <label>Inscripcion Id</label>
+            <InputNumber @bind-Value="@Inscripcion.InscripcionId"  class="form-control" />
+            <ValidationMessage For="@(()=>Inscripcion.InscripcionId)" />
+            <button class="btn btn-outline-primary" type="button" @onclick="Buscar">Buscar</button>
+        </div>
+
+        <div class="form-group">
+            <label>Semestre</label>
+            <InputText @bind-Value="@Inscripcion.Semestre" class="form-control" />
+            <ValidationMessage For="@(()=>Inscripcion.Semestre)" />
+        </div>
+
+        <div class="form-group">
+            <label>Limite</label>
+            <InputNumber @bind-Value="@Inscripcion.Limite" @oninput="Calculo" class="form-control" />
+            <ValidationMessage For="@(()=>Inscripcion.Limite)" />
+        </div>
+
+        <div class="form-group">
+            <label>Tomados</label>
+            <InputNumber @bind-Value="@Inscripcion.Tomados" @onpointerout="Calculo" @oninput="Calculo" class="form-control" />
+            <ValidationMessage For="@(()=>Inscripcion.Tomados)" />
+        </div>
+
+        <div class="form-group">
+            <label>Disponibles</label>
+            <InputNumber @bind-Value="@Inscripcion.Disponible" class="form-control" ReadOnly="true" />
+            <ValidationMessage For="@(()=>Inscripcion.Disponible)" />
+        </div>
+
+        <p class="text-dark">@Mensaje</p>
+
+        <div class="form-group">
+            <button class="btn btn-primary" type="button" @onclick="Limpiar">Limpiar</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
+            <button class="btn btn-danger" type="button" @onclick="Eliminar">Eliminar</button>
+
+        </div>
+
+    </EditForm>
+    </div>
+
+@code {
+
+
+    public Inscripcions Inscripcion = new Inscripcions();
+    public string Mensaje = "";
+
+    public void Calculo()
+    {
+        Inscripcion.Disponible = Inscripcion.Limite - Inscripcion.Tomados;
+    }
+
+
+    public void Limpiar()
+    {
+        Inscripcions inscripcion = new Inscripcions();
+    }
+
+    public void Guardar()
+    {
+        InscripcionController cont = new InscripcionController();
+        if (Inscripcion.Tomados > Inscripcion.Limite)
+        {
+            Mensaje = "Los credito Tomados no puede ser mayor que el limite";
+        }
+        else
+        {
+            if (cont.Guardar(Inscripcion))
+            {
+                Inscripcion = new Inscripcions();
+                Mensaje = "Incripcion Guardado";
+            }
+            else
+            {
+                Inscripcion = new Inscripcions();
+                Mensaje = "Error al guardar";
+            }
+        }
+    }
+
+    public void Buscar()
+    {
+        InscripcionController cont = new InscripcionController();
+
+        var temp = cont.Buscar(Inscripcion.InscripcionId);
+
+        if (Inscripcion!=null)
+        {
+            Inscripcion = temp;
+        }
+        else
+        {
+            Inscripcion = new Inscripcions();
+            Mensaje = "Incripcion no encontrado";
+        }
+    }
+
+    public void Eliminar()
+    {
+        InscripcionController cont = new InscripcionController();
+
+        var temp = cont.Buscar(Inscripcion.InscripcionId);
+
+        if (temp !=null)
+        {
+            if (cont.Eliminar(Inscripcion.InscripcionId))
+            {
+                Inscripcion = new Inscripcions();
+                Mensaje = "Incripcion Eliminado";
+            }
+            else
+            {
+                Inscripcion = new Inscripcions();
+                Mensaje = "Error al Eliminar";
+            }
+        }
+    }
+
+
+
+}
